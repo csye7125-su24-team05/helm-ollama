@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: cve-gpt
+  namespace: {{ .Release.Namespace }}
+spec:
+  hosts:
+    - {{ .Values.host | quote }}
+  gateways:
+    {{ range .Values.gateways }}
+    - {{ . | quote }}
+    {{ end }}
+  http:
+    - match:
+        - uri:
+            prefix: {{ .Values.prefix | quote }}
+      route:
+        - destination:
+            host: "{{ include "helm-ollama.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local"
+            port:
+              number: {{ .Values.service.port }}
