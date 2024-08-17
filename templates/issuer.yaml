@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cve-gpt-nexflare-issuer
+spec:
+  acme:
+    # The ACME server URL
+    server: {{ include "helm-ollama.acmeUrl" . | quote }}
+    # Email address used for ACME registration
+    email: {{ .Values.email | quote }}
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: cve-gpt-nexflare-issuer-account-key
+    solvers:
+      - dns01:
+          route53:
+            region: {{ .Values.dns.region | quote }}
+            hostedZoneID: {{ .Values.dns.hostedZoneID | quote }}

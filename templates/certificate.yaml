@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cve-gpt-nexflare-tls
+  namespace: {{ .Values.namespaces.certificate }}
+spec:
+  secretName: cve-gpt-nexflare-tls
+  issuerRef:
+    name: cve-gpt-nexflare-issuer
+    kind: ClusterIssuer
+  commonName: {{ .Values.host }}
+  dnsNames:
+    - {{ .Values.host | quote }}
